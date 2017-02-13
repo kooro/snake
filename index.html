@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <style>
+        .container{height: 300px;width: 300px;position: relative;margin: 100px auto;background: #c2e2ae;}
+        .bgTable{border: 1px solid black;border-spacing: 0;border-collapse:collapse;position: absolute}
+        .bgTable td{height: 20px;width: 20px;border: 1px solid black}
+        .bgTable tr{height: 20px;width: 100px;border: 1px solid black}
+        .cube{display: block;height:22px;width: 22px;background: red;position: absolute;margin: 1px}
+        #cu2{top: 0px;left:115px }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <table class="bgTable">
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+            <tr><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+        </table>
+        <span class="cube" id="cu1"></span>
+        <span class="cube" id="cu2"></span>
+    </div>
+    <script>
+        var container=document.querySelector('.container');
+        var cube=document.querySelector('.cube');
+        var up=38,down=40,left=37,right=39;//        上下左右 方向键的键码(keyCode)是38、40、37和39,
+        var t1,t2,t3,t4;
+        var cu1=document.querySelector('#cu1');
+        var cu2=document.querySelector('#cu2');
+        var randomdot=[0,23,46,69,92,115,138,161,184,207,230,253,276];//随机自由点位置
+        var n=2;
+
+        var arrLeft=[],arrTop=[];//用来存储第一个方块每一步的位置
+
+        /*设置向上下左右移动*/
+        function moveLeft(obj){
+             t1=setInterval(function(){
+                 obj.style.left=obj.offsetLeft-24+'px';
+                 arrLeft.push(obj.offsetLeft);//存储位置
+                 arrTop.push(obj.offsetTop);
+                 if(obj.offsetLeft<=20){clearInterval(t1);}
+             },500)
+        }
+        function moveRight(obj){
+            t2=setInterval(function(){
+                obj.style.left=obj.offsetLeft+22+'px';
+                arrLeft.push(obj.offsetLeft);
+                arrTop.push(obj.offsetTop);
+                if(obj.offsetLeft>=270){clearInterval(t2);}
+            },500)
+        }
+        function moveTop(obj){
+            t3=setInterval(function(){
+                obj.style.top=obj.offsetTop-24+'px';
+                arrLeft.push(obj.offsetLeft);
+                arrTop.push(obj.offsetTop);
+                if(obj.offsetTop<=20){clearInterval(t3);}
+            },500)
+        }
+        function moveBottom(obj){
+            t4=setInterval(function(){
+                obj.style.top=obj.offsetTop+22+'px';
+                arrLeft.push(obj.offsetLeft);
+                arrTop.push(obj.offsetTop);
+                if(obj.offsetTop>=270){clearInterval(t4);}
+            },500)
+        }
+        /*对上下左右按键进行监听，按下某一个，会取消其他方向的移动，*/
+        document.onkeydown=function(){
+            var obj=cu1;
+            if(event.keyCode==up){
+                clearInterval(t1);
+                clearInterval(t2);
+                clearInterval(t3);
+                clearInterval(t4);
+                moveTop(obj);
+            }else if(event.keyCode==down){
+                clearInterval(t1);
+                clearInterval(t2);
+                clearInterval(t3);
+                clearInterval(t4);
+                moveBottom(obj);
+            }else if(event.keyCode==left){
+                clearInterval(t1);
+                clearInterval(t2);
+                clearInterval(t3);
+                clearInterval(t4);
+                moveLeft(obj);
+            }else if(event.keyCode==right){
+                clearInterval(t1);
+                clearInterval(t2);
+                clearInterval(t3);
+                clearInterval(t4);
+                moveRight(obj);
+            }
+        };
+        /*用来产生随机位置的自由方块*/
+        function newdot(){
+            var dot=document.createElement('span');
+            dot.className='cube';
+            container.appendChild(dot);
+            console.log(container.childElementCount);
+            var top1=Math.floor(Math.random()*14);
+            dot.style.top=''+randomdot[top1]+'px';
+            var left1=Math.floor(Math.random()*14);
+            dot.style.left=''+randomdot[left1]+'px';
+        }
+        /*当第一个方块和自由方块的位置重叠，自由方块将跟随第一个方块移动*/
+        function together(){
+            var container=document.querySelector('.container');
+            var small=container.lastElementChild;
+            if(cube.offsetLeft==small.offsetLeft&&cube.offsetTop==small.offsetTop){
+                var a=n;//用a将n的某一次的值固定
+                setInterval(function(){
+                    /*自由方块1的位置为第一个方块倒一步的位置，自由方块2的位置为第一个方块倒两步的位置，以此内推*/
+                    small.style.left=arrLeft[arrLeft.length-a]-1+'px';
+                    small.style.top=arrTop[arrTop.length-a]-1+'px';
+                },10);
+                newdot();
+                n++;
+            }
+        }
+        T=setInterval(function(){
+            together();
+        },500);
+
+    </script>
+</body>
+</html>
